@@ -18,7 +18,9 @@ export default class Bird {
   }
 
   addClickHandler() {
-    this.el.addEventListener('click', () => console.log('bird was down'))
+    this.el.addEventListener('click', () => {
+      this.el.classList.add('hit')
+    })
   }
 
   update() {

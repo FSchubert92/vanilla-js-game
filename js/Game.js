@@ -1,10 +1,12 @@
 import Bird from './Bird'
+import Counter from './Counter'
 
 export default class Game {
   birds = []
 
   constructor() {
     this.createBirds()
+    this.createCounter()
     this.loop()
   }
   createBirds() {
@@ -13,6 +15,14 @@ export default class Game {
     this.addBird()
     this.addBird()
     this.addBird()
+  }
+  createCounter() {
+    this.counter = new Counter()
+    this.counter.addPlayerPoint()
+    this.counter.addPlayerPoint()
+    this.counter.addBirdsPoint()
+    this.counter.addBirdsPoint()
+    this.counter.addBirdsPoint()
   }
 
   addBird() {
