@@ -123,10 +123,14 @@ function () {
         color = _config.color,
         speed = _config.speed,
         position = _config.position,
-        removeBird = _config.removeBird;
+        onRemove = _config.onRemove,
+        onClick = _config.onClick,
+        onEscape = _config.onEscape;
+    this.onClick = onClick;
+    this.onRemove = onRemove;
+    this.onEscape = onEscape;
     this.color = color;
     this.position = position;
-    this.removeBird = removeBird;
     this.speed = speed;
     this.el = this.render();
     this.addClickHandler();
@@ -138,8 +142,16 @@ function () {
       var _this = this;
 
       this.el.addEventListener('click', function () {
-        _this.el.classList.add('hit');
+        _this.onClick();
+
+        _this.remove();
       });
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      this.onRemove(this);
+      this.el.remove();
     }
   }, {
     key: "update",
@@ -147,8 +159,8 @@ function () {
       this.position = this.position + this.speed;
 
       if (this.position > window.innerWidth) {
-        this.removeBird(this);
-        this.el.remove();
+        this.remove();
+        this.onEscape();
       } else {
         this.el.style.left = this.position + 'px';
       }
@@ -159,6 +171,7 @@ function () {
       var el = document.createElement('div');
       el.className = 'bird';
       el.style.background = this.color;
+      el.style.top = Math.random() * window.innerHeight + 'px';
       document.body.insertAdjacentElement('beforeend', el);
       return el;
     }
@@ -281,7 +294,14 @@ function () {
       var index = _this.birds.indexOf(bird);
 
       _this.birds = [].concat(_toConsumableArray(_this.birds.slice(0, index)), _toConsumableArray(_this.birds.slice(index + 1)));
-      console.log(_this.birds.length);
+    });
+
+    _defineProperty(this, "updateBirdsPoints", function () {
+      _this.counter.addBirdsPoint();
+    });
+
+    _defineProperty(this, "updatePlayerPoints", function () {
+      _this.counter.addPlayerPoint();
     });
 
     this.createBirds();
@@ -302,17 +322,14 @@ function () {
     key: "createCounter",
     value: function createCounter() {
       this.counter = new _Counter__WEBPACK_IMPORTED_MODULE_1__["default"]();
-      this.counter.addPlayerPoint();
-      this.counter.addPlayerPoint();
-      this.counter.addBirdsPoint();
-      this.counter.addBirdsPoint();
-      this.counter.addBirdsPoint();
     }
   }, {
     key: "addBird",
     value: function addBird() {
       var config = {
-        removeBird: this.removeBird
+        onRemove: this.removeBird,
+        onClick: this.updatePlayerPoints,
+        onEscape: this.updateBirdsPoints
       };
       this.birds = [].concat(_toConsumableArray(this.birds), [new _Bird__WEBPACK_IMPORTED_MODULE_0__["default"](config)]);
     }
