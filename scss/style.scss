@@ -1,9 +1,6 @@
-@import 'colors';
-@import 'utils'; // functional helpers
-@import 'base'; // global styles
-
-// **********
-// components
-// **********
-@import 'components/grid'; // main grid
-// ... add more here
+.bird {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
