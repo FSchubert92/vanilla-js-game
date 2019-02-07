@@ -1,5 +1,6 @@
 body {
-  background: #00b4ff; }
+  background: #00b4ff;
+  overflow: hidden; }
 
 .bird {
   position: absolute;
@@ -57,5 +58,13 @@ body {
 .t250-l200 {
   top: 500px;
   left: 900px; }
+
+.hunter {
+  width: 100px;
+  height: 50px;
+  background: black;
+  position: absolute;
+  top: 90%;
+  left: 45%; }
 
 /*# sourceMappingURL=style.css.map */
