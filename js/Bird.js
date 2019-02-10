@@ -1,4 +1,5 @@
-export default class Bird {
+import Entity from './Entity'
+export default class Bird extends Entity {
   defaultConfig = {
     color: 'black',
     speed: 2 + Math.random() * 4,
@@ -9,6 +10,7 @@ export default class Bird {
   }
 
   constructor(config) {
+    super()
     config = { ...this.defaultConfig, ...config }
     const { color, speed, position, onRemove, onClick, onEscape } = config
     this.onClick = onClick
@@ -17,7 +19,7 @@ export default class Bird {
     this.color = color
     this.position = position
     this.speed = speed
-    this.el = this.render()
+    this.el = this.render('bird', { background: this.color })
     this.addClickHandler()
   }
 
@@ -26,11 +28,6 @@ export default class Bird {
       this.onClick()
       this.remove()
     })
-  }
-
-  remove() {
-    this.onRemove(this)
-    this.el.remove()
   }
 
   update() {
@@ -43,13 +40,5 @@ export default class Bird {
       this.el.style.top =
         this.position.y + Math.sin(this.position.x / 100) * 100 + 'px'
     }
-  }
-
-  render() {
-    const el = document.createElement('div')
-    el.className = 'bird'
-    el.style.background = this.color
-    document.body.insertAdjacentElement('beforeend', el)
-    return el
   }
 }

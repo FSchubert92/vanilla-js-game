@@ -64,7 +64,15 @@ body {
   height: 50px;
   background: black;
   position: absolute;
+  transform: translate(-50%);
   top: 90%;
   left: 45%; }
+
+.bullet {
+  position: absolute;
+  transform: translate(-50%);
+  width: 20px;
+  height: 30px;
+  background: hotpink; }
 
 /*# sourceMappingURL=style.css.map */

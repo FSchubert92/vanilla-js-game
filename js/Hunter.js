@@ -1,9 +1,13 @@
-export default class Hunter {
+import Entity from './Entity'
+export default class Hunter extends Entity {
   position = window.innerWidth / 2
   speed = 0
 
-  constructor() {
-    this.el = this.render()
+  constructor(config) {
+    super()
+    const { onShoot } = config
+    this.onShoot = onShoot
+    this.el = this.render('hunter')
     this.setupMovement()
   }
   update() {
@@ -17,6 +21,8 @@ export default class Hunter {
         this.speed = -10
       } else if (event.key === 'ArrowRight') {
         this.speed = +10
+      } else if (event.key === ' ') {
+        this.onShoot(this.position)
       }
     })
     document.body.addEventListener('keyup', event => {
@@ -24,12 +30,5 @@ export default class Hunter {
         this.speed = 0
       }
     })
-  }
-
-  render() {
-    const el = document.createElement('div')
-    el.className = 'hunter'
-    document.body.insertAdjacentElement('beforeend', el)
-    return el
   }
 }
