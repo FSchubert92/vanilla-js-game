@@ -1,18 +1,17 @@
 import Entity from './Entity'
+
 export default class Bird extends Entity {
   defaultConfig = {
     color: 'black',
-    speed: 2 + Math.random() * 4,
-    position: {
-      x: 0,
-      y: 200 + Math.random() * 200,
-    },
+    speed: 1 + Math.random() * 2,
+    position: { x: 0, y: 200 + Math.random() * 200 },
   }
 
   constructor(config) {
     super()
     config = { ...this.defaultConfig, ...config }
     const { color, speed, position, onRemove, onClick, onEscape } = config
+
     this.onClick = onClick
     this.onRemove = onRemove
     this.onEscape = onEscape

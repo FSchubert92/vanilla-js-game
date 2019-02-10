@@ -7,10 +7,10 @@ export default class Entity {
         el.style[key] = styles[key]
       })
     }
-
     document.body.insertAdjacentElement('beforeend', el)
     return el
   }
+
   remove() {
     this.onRemove && this.onRemove(this)
     this.el.remove()

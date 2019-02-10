@@ -135,7 +135,7 @@ function (_Entity) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "defaultConfig", {
       color: 'black',
-      speed: 2 + Math.random() * 4,
+      speed: 1 + Math.random() * 2,
       position: {
         x: 0,
         y: 200 + Math.random() * 200
@@ -245,27 +245,28 @@ function (_Entity) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "position", {
       x: 0,
-      y: 0
+      y: window.innerHeight - 120
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "speed", 20);
 
     var onRemove = config.onRemove,
         positionX = config.positionX;
+    _this.onRemove = onRemove;
+    _this.position.x = positionX;
     _this.el = _this.render('bullet', {
       left: positionX + 'px'
     });
-    _this.onRemove = onRemove;
     return _this;
   }
 
   _createClass(Bullet, [{
     key: "update",
     value: function update() {
-      this.position.y += this.speed;
-      this.el.style.bottom = this.position.y + 'px';
+      this.position.y -= this.speed;
+      this.el.style.top = this.position.y + 'px';
 
-      if (this.position.y > window.innerHeight) {
+      if (this.position.y < 0) {
         this.remove();
       }
     }
@@ -453,19 +454,27 @@ function () {
 
     _classCallCheck(this, Game);
 
-    _defineProperty(this, "entities", []);
+    _defineProperty(this, "birds", []);
+
+    _defineProperty(this, "bullets", []);
 
     _defineProperty(this, "shoot", function (positionX) {
-      _this.entities = [].concat(_toConsumableArray(_this.entities), [new _Bullet__WEBPACK_IMPORTED_MODULE_3__["default"]({
-        onRemove: _this.removeEntity,
+      _this.bullets = [].concat(_toConsumableArray(_this.bullets), [new _Bullet__WEBPACK_IMPORTED_MODULE_3__["default"]({
+        onRemove: _this.removeBullet,
         positionX: positionX
       })]);
     });
 
-    _defineProperty(this, "removeEntity", function (bird) {
-      var index = _this.entities.indexOf(bird);
+    _defineProperty(this, "removeBird", function (bird) {
+      var index = _this.birds.indexOf(bird);
 
-      _this.entities = [].concat(_toConsumableArray(_this.entities.slice(0, index)), _toConsumableArray(_this.entities.slice(index + 1)));
+      _this.birds = [].concat(_toConsumableArray(_this.birds.slice(0, index)), _toConsumableArray(_this.birds.slice(index + 1)));
+    });
+
+    _defineProperty(this, "removeBullet", function (bullet) {
+      var index = _this.bullets.indexOf(bullet);
+
+      _this.bullets = [].concat(_toConsumableArray(_this.bullets.slice(0, index)), _toConsumableArray(_this.bullets.slice(index + 1)));
     });
 
     _defineProperty(this, "updateBirdsPoints", function () {
@@ -476,20 +485,34 @@ function () {
       _this.counter.addPlayerPoint();
     });
 
-    this.createBirds();
+    _defineProperty(this, "checkForBirdHit", function (bullet) {
+      var _bullet$position = bullet.position,
+          bulletX = _bullet$position.x,
+          bulletY = _bullet$position.y;
+
+      _this.birds.forEach(function (bird) {
+        var _bird$position = bird.position,
+            birdX = _bird$position.x,
+            birdY = _bird$position.y;
+
+        if (birdX < bulletX && birdX + 40 > bulletX && birdY > bulletY && birdY - 40 < bulletY) {
+          bird.remove();
+          bullet.remove();
+
+          _this.updatePlayerPoints();
+        }
+      });
+    });
+
     this.createCounter();
-    this.loop();
     this.createHunter();
+    this.loop();
   }
 
   _createClass(Game, [{
-    key: "createBirds",
-    value: function createBirds() {
-      this.addBird();
-      this.addBird();
-      this.addBird();
-      this.addBird();
-      this.addBird();
+    key: "createCounter",
+    value: function createCounter() {
+      this.counter = new _Counter__WEBPACK_IMPORTED_MODULE_1__["default"]();
     }
   }, {
     key: "createHunter",
@@ -497,22 +520,16 @@ function () {
       this.hunter = new _Hunter__WEBPACK_IMPORTED_MODULE_2__["default"]({
         onShoot: this.shoot
       });
-      this.entities = [].concat(_toConsumableArray(this.entities), [this.hunter]);
-    }
-  }, {
-    key: "createCounter",
-    value: function createCounter() {
-      this.counter = new _Counter__WEBPACK_IMPORTED_MODULE_1__["default"]();
     }
   }, {
     key: "addBird",
     value: function addBird() {
       var config = {
-        onRemove: this.removeEntity,
+        onRemove: this.removeBird,
         onClick: this.updatePlayerPoints,
         onEscape: this.updateBirdsPoints
       };
-      this.entities = [].concat(_toConsumableArray(this.entities), [new _Bird__WEBPACK_IMPORTED_MODULE_0__["default"](config)]);
+      this.birds = [].concat(_toConsumableArray(this.birds), [new _Bird__WEBPACK_IMPORTED_MODULE_0__["default"](config)]);
     }
   }, {
     key: "loop",
@@ -520,11 +537,13 @@ function () {
       var _this2 = this;
 
       Math.random() < 1 / 60 && this.addBird();
-      this.entities.forEach(function (entity) {
+      var entities = [].concat(_toConsumableArray(this.birds), _toConsumableArray(this.bullets), [this.hunter]);
+      entities.forEach(function (entity) {
         return entity.update();
       });
+      this.bullets.forEach(this.checkForBirdHit);
       requestAnimationFrame(function () {
-        _this2.loop();
+        return _this2.loop();
       });
     }
   }]);
@@ -607,9 +626,9 @@ function (_Entity) {
 
       document.body.addEventListener('keydown', function (event) {
         if (event.key === 'ArrowLeft') {
-          _this2.speed = -10;
+          _this2.speed = -8;
         } else if (event.key === 'ArrowRight') {
-          _this2.speed = +10;
+          _this2.speed = 8;
         } else if (event.key === ' ') {
           _this2.onShoot(_this2.position);
         }

@@ -2,29 +2,6 @@ body {
   background: #00b4ff;
   overflow: hidden; }
 
-.bird {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%; }
-
-.hit {
-  background: red !important; }
-
-.counter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 3px black solid;
-  font-size: 30px;
-  margin: 20px;
-  width: 100px;
-  height: 50px;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  user-select: none; }
-
 .cloud {
   background: #fff;
   border-radius: 100px;
@@ -58,6 +35,29 @@ body {
 .t250-l200 {
   top: 500px;
   left: 900px; }
+
+.bird {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; }
+
+.hit {
+  background: red !important; }
+
+.counter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px black solid;
+  font-size: 30px;
+  margin: 20px;
+  width: 100px;
+  height: 50px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  user-select: none; }
 
 .hunter {
   width: 100px;
