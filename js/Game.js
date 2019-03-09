@@ -2,10 +2,12 @@ import Bird from './Bird'
 import Counter from './Counter'
 import Hunter from './Hunter'
 import Bullet from './Bullet'
+import Clouds from './Clouds'
 
 export default class Game {
   birds = []
   bullets = []
+  clouds = []
 
   constructor() {
     this.createCounter()
@@ -36,11 +38,23 @@ export default class Game {
     }
 
     this.birds = [...this.birds, new Bird(config)]
+    console.log(this.birds)
   }
 
   removeBird = bird => {
     const index = this.birds.indexOf(bird)
     this.birds = [...this.birds.slice(0, index), ...this.birds.slice(index + 1)]
+  }
+  addCloud() {
+    this.clouds = [...this.clouds, new Clouds(this.removeCloud)]
+    console.log(this.clouds)
+  }
+  removeCloud = cloud => {
+    const index = this.clouds.indexOf(cloud)
+    this.clouds = [
+      ...this.clouds.slice(0, index),
+      ...this.clouds.slice(index + 1),
+    ]
   }
 
   removeBullet = bullet => {
@@ -80,7 +94,19 @@ export default class Game {
 
   loop() {
     Math.random() < 1 / 60 && this.addBird()
-    const entities = [...this.birds, ...this.bullets, this.hunter]
+    if (this.counter.playerPoints === 5) {
+      Math.random() < 1 / 500 && this.addCloud()
+    } else if (this.counter.playerPoints > 10) {
+      Math.random() < 1 / 300 && this.addCloud()
+    } else if (this.counter.playerPoints > 30) {
+      Math.random() < 1 / 200 && this.addCloud()
+    }
+    const entities = [
+      ...this.birds,
+      ...this.bullets,
+      ...this.clouds,
+      this.hunter,
+    ]
     entities.forEach(entity => entity.update())
     this.bullets.forEach(this.checkForBirdHit)
     requestAnimationFrame(() => this.loop())
