@@ -1,24 +1,19 @@
-# Express boilerplate
+# Vanilla JavaScript Game
 
-A simple boilerplate for websites without modern JS in the frontend
+A simple game built entirely with ES7+ using Babel.  
 
-## Top features
-- ES7+ with Babel
-- scss
-- browser-sync
-- ejs
-
-## Installation
+## Getting started
+Install all dependencies 
 ```sh
 $ npm install
 ```
-
-## Start server
+and start the server
 ```sh
 $ npm start
 ```
 
-## Stop server
-```sh
-$ ^C # ctrl + c
-```
+## Gameplay
+Try to catch the balls before they fly out the screen! The more balls you get the more clouds appear!
+Shoot balls using ```space```
+
+Have fun!
